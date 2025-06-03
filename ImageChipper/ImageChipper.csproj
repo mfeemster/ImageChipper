@@ -12,10 +12,13 @@
     <Description>A very small library to break large images into smaller tiles, using the ImageSharp library for the image processing.</Description>
     <RepositoryUrl>https://github.com/mfeemster/ImageChipper</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.8" />
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>
