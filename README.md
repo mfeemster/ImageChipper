@@ -6,17 +6,16 @@ A C# library to split large images into smaller ones using the ImageSharp librar
 ### Split an image into tiles of size 4096x4096 and save each as a bitmap in the form of [row]_[col].bmp
 
 ```
-using var chipper = new ImageChipper.ImageChipper("C:\\mybigimages\\largeimagefile.jpg", 7000, 7000, true)//Adjust memory size as needed, 7000 works for 1GB images.
+using var chipper = new ImageChipper.ImageChipper("C:\\mybigimages\\bigmclargehuge.jpg", 7000, 7000, true)//Adjust memory size as needed, 7000 works for 1GB images.
 chipper.ChipByDimensions("C:\\outputpath", 4096, 4096, ".bmp");
 ```
-
 or using iteration
 
 ```
 using SixLabors.ImageSharp;
 var imageIndex = 0;
 
-using var chipper = new ImageChipper.ImageChipper("C:\\mybigimages\\largeimagefile.jpg", 7000, 7000, true)
+using var chipper = new ImageChipper.ImageChipper("C:\\mybigimages\\bigmclargehuge.jpg", 7000, 7000, true)
 
 foreach (var image in chipper.GetChipsByDimension(4096, 4096))
 	image.Save(Path.Combine("C:\\outputpath", $"{imageIndex++}.bmp"));
@@ -25,17 +24,16 @@ foreach (var image in chipper.GetChipsByDimension(4096, 4096))
 ### Split an image into 100 tiles and save each as a bitmap in the form of [row]_[col].bmp
 
 ```
-using var chipper = new ImageChipper.ImageChipper("C:\\mybigimages\\largeimagefile.jpg", 7000, 7000, true)
+using var chipper = new ImageChipper.ImageChipper("C:\\mybigimages\\bigmclargehuge.jpg", 7000, 7000, true)
 chipper.ChipByCount("C:\\outputpath", 10, 10, ".bmp");
 ```
-
 or using iteration:
 
 ```
 using SixLabors.ImageSharp;
 var imageIndex = 0;
 
-using var chipper = new ImageChipper.ImageChipper("C:\\mybigimages\\largeimagefile.jpg", 7000, 7000, true)
+using var chipper = new ImageChipper.ImageChipper("C:\\mybigimages\\bigmclargehuge.jpg", 7000, 7000, true)
 
 foreach (var image in chipper.GetChipsByCount(10, 10))
 	image.Save(Path.Combine("C:\\outputpath", $"{imageIndex / 10}_{imageIndex++ % 10}.bmp"));
