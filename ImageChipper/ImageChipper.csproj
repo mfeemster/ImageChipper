@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <Version>1.0.0.1</Version>
+    <Version>1.0.0.2</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Image Chipper</Title>
     <Authors>Matt Feemster</Authors>
     <Company>None</Company>
-    <Description>A very small library to break large images into smaller tiles, using the ImageSharp library for the image processing.</Description>
+    <Description>A C# library to split large images into smaller ones using the ImageSharp library.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/mfeemster/ImageChipper</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
