@@ -3,13 +3,13 @@ A C# library to split large images into smaller ones using the ImageSharp librar
 
 ## Example usage
 
-### Split an image into tiles of size 4096x4096 and save each as a bitmap in the form of [row]_[col].bmp
+### Split an image into tiles of size 4096x4096 and save each as a bitmap in the form of [row]_[col].bmp:
 
 ```
 using var chipper = new ImageChipper.ImageChipper("C:\\mybigimages\\bigmclargehuge.jpg", 7000, 7000, true)//Adjust memory size as needed, 7000 works for 1GB images.
 chipper.ChipByDimensions("C:\\outputpath", 4096, 4096, ".bmp");
 ```
-or using iteration
+or using iteration:
 
 ```
 using SixLabors.ImageSharp;
@@ -21,7 +21,7 @@ foreach (var image in chipper.GetChipsByDimension(4096, 4096))
 	image.Save(Path.Combine("C:\\outputpath", $"{imageIndex++}.bmp"));
 ```
 
-### Split an image into 100 tiles and save each as a bitmap in the form of [row]_[col].bmp
+### Split an image into 100 tiles and save each as a bitmap in the form of [row]_[col].bmp:
 
 ```
 using var chipper = new ImageChipper.ImageChipper("C:\\mybigimages\\bigmclargehuge.jpg", 7000, 7000, true)
@@ -39,7 +39,7 @@ foreach (var image in chipper.GetChipsByCount(10, 10))
 	image.Save(Path.Combine("C:\\outputpath", $"{imageIndex / 10}_{imageIndex++ % 10}.bmp"));
 ```
 
-### Use powershell and ChipImage to split an entire folder of images
+### Use Powershell and ChipImage to split an entire folder of images:
 
 ```
 $imageCount = 0
