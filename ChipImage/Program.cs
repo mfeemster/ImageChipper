@@ -91,7 +91,7 @@ namespace ImageSplitter
 					else if (columns != 0 && rows != 0)
 						chipper.ChipByCount(outDir, columns, rows, ".bmp");
 					else
-						throw new Exception("Neither width and height or columsn and rows were specified. Provide one pair or the other.");
+						throw new Exception("Neither width and height or columns and rows were specified. Provide one pair or the other.");
 				}
 				catch (Exception ex)
 				{
