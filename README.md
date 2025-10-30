@@ -1,5 +1,6 @@
 # ImageChipper
 A C# library to split large images into smaller ones using the ImageSharp library.
+The use of ImageSharp allows for the processing of multi-gigabyte images as long as your system has enough RAM.
 
 ## Example usage
 
@@ -52,6 +53,6 @@ ls "C:\\mybigimages\\*.png" -file | ForEach-Object {
 #"Dir: " + $outdir
 #"Image index: " + $imageindex
 #"Prefix: " + $prefix
-	.\ChipImage.exe -i $_.FullName -o $outdir -mm 7000 -v -w 4096 -h 4096 -p $prefix
+	.\ChipImage.exe -i $_.FullName -o $outdir -mm 7000 -v -w 4096 -ht 4096 -p $prefix
 }
 ```
