@@ -59,7 +59,7 @@ namespace ImageChipper
 				});
 			}
 
-			Log($"Loading original image: {filename}.");
+			Log($"Loading original image: {filename}");
 			image = SixLabors.ImageSharp.Image.Load<Rgba32>(Filename);
 		}
 

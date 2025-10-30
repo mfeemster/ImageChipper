@@ -1,4 +1,6 @@
-﻿using System.CommandLine;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using System.CommandLine;
 
 namespace ImageSplitter
 {
@@ -31,74 +33,121 @@ namespace ImageSplitter
 		{
 			var rootCommand = new RootCommand("ChipImage will create image tiles out of a larger image.");
 			//
-			var inputOption = new Option<string>(["--input", "-i"], "The input file to process.") { IsRequired = true };
-			rootCommand.Add(inputOption);
-			//
-			var outputDirOption = new Option<string>(["--outdir", "-o"], () => ".", "The output directory to save the tiles in. The trailing backslash is optional and will be added if not present.");
-			rootCommand.Add(outputDirOption);
-			//
-			var maxMemOption = new Option<int>(["--maxmem", "-mm"], () => 5000, "The maximum amount of memory to use in megabytes.");
-			rootCommand.Add(maxMemOption);
-			//
-			var verboseOption = new Option<bool>(["--verbose", "-v"], () => false, "Whether to print progress information to the console.");
-			rootCommand.Add(verboseOption);
-			//
-			var widthOption = new Option<int>(["--width", "-w"], "The width of the output images, specify in conjunction with height.");
-			rootCommand.Add(widthOption);
-			//
-			var heightOption = new Option<int>(["--height", "-h"], "The height of the output images, specify in conjunction with width.");
-			rootCommand.Add(heightOption);
-			//
-			var colsOption = new Option<int>(["--columns", "-c"], "The number of output images in the horizontal direction, specify in conjunction with rows as an alternative to specifying width and height.");
-			rootCommand.Add(colsOption);
-			//
-			var rowsOption = new Option<int>(["--rows", "-r"], "The number of output images in the vertical direction, specify in conjunction with columns as an alternative to specifying width and height.");
-			rootCommand.Add(rowsOption);
-			//
-			var prefixOption = new Option<string>(["--prefix", "-p"], () => "", "The prefix to prepend to each output filename.");
-			rootCommand.Add(prefixOption);
-			//
-			var suffixOption = new Option<string>(["--suffx", "-s"], () => "", "The suffix to prepend to each output filename.");
-			rootCommand.Add(suffixOption);
-			//
-			var extOption = new Option<string>(["--ext", "-e"], () => ".bmp", "The image file extension to use including the leading dot.");
-			rootCommand.Add(extOption);
-			//
-			rootCommand.SetHandler((context) =>
+			var inputOption = new Option<string>("--input", "-i")
 			{
-				var input = context.ParseResult.GetValueForOption(inputOption) ?? throw new Exception("--input was null, which it should never be.");
-				var outDir = context.ParseResult.GetValueForOption(outputDirOption) ?? throw new Exception("--output was null, which it should never be.");
-				var maxMem = context.ParseResult.GetValueForOption(maxMemOption);
-				var verbose = context.ParseResult.GetValueForOption(verboseOption);
-				var width = context.ParseResult.GetValueForOption(widthOption);
-				var height = context.ParseResult.GetValueForOption(heightOption);
-				var columns = context.ParseResult.GetValueForOption(colsOption);
-				var rows = context.ParseResult.GetValueForOption(rowsOption);
-				var prefix = context.ParseResult.GetValueForOption(prefixOption) ?? throw new Exception("--prefix was null, which it should never be.");
-				var suffix = context.ParseResult.GetValueForOption(suffixOption) ?? throw new Exception("--suffix was null, which it should never be.");
-				var ext = context.ParseResult.GetValueForOption(extOption);
+				Description = "The input file to process.",
+				Required = true
+			};
+			rootCommand.Options.Add(inputOption);
+			//
+			var outputDirOption = new Option<string>("--outdir", "-o")
+			{
+				DefaultValueFactory = (dummy) => ".",
+				Description = "The output directory to save the tiles in. The trailing backslash is optional and will be added if not present."
+			};
+			rootCommand.Options.Add(outputDirOption);
+			//
+			var maxMemOption = new Option<int>("--maxmem", "-mm")
+			{
+				DefaultValueFactory = (dummy) => 5000,
+				Description = "The maximum amount of memory to use in megabytes."
+			};
+			rootCommand.Options.Add(maxMemOption);
+			//
+			var verboseOption = new Option<bool>("--verbose", "-v")
+			{
+				DefaultValueFactory = (dummy) => false,
+				Description = "Whether to print progress information to the console."
+			};
+			rootCommand.Options.Add(verboseOption);
+			//
+			var widthOption = new Option<int>("--width", "-w")
+			{
+				Description = "The width of the output images, specify in conjunction with height."
+			};
+			rootCommand.Options.Add(widthOption);
+			//
+			var heightOption = new Option<int>("--height", "-ht")
+			{
+				Description = "The height of the output images, specify in conjunction with width."
+			};
+			rootCommand.Options.Add(heightOption);
+			//
+			var colsOption = new Option<int>("--columns", "-c")
+			{
+				Description = "The number of output images in the horizontal direction, specify in conjunction with rows as an alternative to specifying width and height."
+			};
+			rootCommand.Options.Add(colsOption);
+			//
+			var rowsOption = new Option<int>("--rows", "-r")
+			{
+				Description = "The number of output images in the vertical direction, specify in conjunction with columns as an alternative to specifying width and height."
+			};
+			rootCommand.Options.Add(rowsOption);
+			//
+			var prefixOption = new Option<string>("--prefix", "-p")
+			{
+				DefaultValueFactory = (dummy) => "",
+				Description = "The prefix to prepend to each output filename."
+			};
+			rootCommand.Options.Add(prefixOption);
+			//
+			var suffixOption = new Option<string>("--suffx", "-s")
+			{
+				DefaultValueFactory = (dummy) => "",
+				Description = "The suffix to prepend to each output filename."
+			};
+			rootCommand.Options.Add(suffixOption);
+			//
+			var extOption = new Option<string>("--ext", "-e")
+			{
+				DefaultValueFactory = (dummy) => ".bmp",
+				Description = "The image file extension to use including the leading dot."
+			};
+			rootCommand.Options.Add(extOption);
+			//
+			rootCommand.SetAction((pr) =>
+			{
+				var input = pr.GetValue(inputOption) ?? throw new Exception("--input was null, which it should never be.");
+				var outDir = pr.GetValue(outputDirOption) ?? throw new Exception("--output was null, which it should never be.");
+				var maxMem = pr.GetValue(maxMemOption);
+				var verbose = pr.GetValue(verboseOption);
+				var width = pr.GetValue(widthOption);
+				var height = pr.GetValue(heightOption);
+				var columns = pr.GetValue(colsOption);
+				var rows = pr.GetValue(rowsOption);
+				var prefix = pr.GetValue(prefixOption) ?? throw new Exception("--prefix was null, which it should never be.");
+				var suffix = pr.GetValue(suffixOption) ?? throw new Exception("--suffix was null, which it should never be.");
+				var ext = pr.GetValue(extOption);
 
 				try
 				{
+					var whSpecified = width != 0 && height != 0;
+					var crSpecified = columns != 0 && rows != 0;
+					
+					if (verbose)
+						Console.WriteLine($"Running with:\n\t{pr}\n");
+
+					if (!whSpecified && !crSpecified)
+						throw new Exception("Neither width and height or columns and rows were specified. Provide one pair or the other.");
+
 					using var chipper = new ImageChipper.ImageChipper(input, maxMem, maxMem, verbose)
 					{
 						Prefix = prefix,
 						Suffix = suffix
 					};
 
-					if (width != 0 && height != 0)
+					if (whSpecified)
 						chipper.ChipByDimensions(outDir, width, height, ".bmp");
-					else if (columns != 0 && rows != 0)
+					else if (crSpecified)
 						chipper.ChipByCount(outDir, columns, rows, ".bmp");
-					else
-						throw new Exception("Neither width and height or columns and rows were specified. Provide one pair or the other.");
 				}
 				catch (Exception ex)
 				{
 					Console.WriteLine($"Failed to split image:\r\n\t{ex.Message}");
 				}
 			});
-			return rootCommand.Invoke(args);
+			return rootCommand.Parse(args).Invoke();
 		}
 	}
 }
